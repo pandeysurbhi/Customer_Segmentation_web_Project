@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RFM Analysis Results</title>
+</head>
+<body>
+    <h1>RFM Analysis Results</h1>
+    <div>
+        <h2>Recency Distribution</h2>
+        <img src="{{ url_for('static', filename='uploads/' + recency_plot.split('/')[-1]) }}" alt="Recency Plot">
+    </div>
+    <div>
+        <h2>Monetary Distribution</h2>
+        <img src="{{ url_for('static', filename='uploads/' + monetary_plot.split('/')[-1]) }}" alt="Monetary Plot">
+    </div>
+    <div>
+        <h2>Frequency Distribution</h2>
+        <img src="{{ url_for('static', filename='uploads/' + frequency_plot.split('/')[-1]) }}" alt="Frequency Plot">
+    </div>
+    <a href="/">Upload another file</a>
+</body>
+</html>

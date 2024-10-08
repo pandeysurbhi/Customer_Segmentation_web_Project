@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Segmentation Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 600px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+        }
+        #result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById('csvFile');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                // Log the response status
+                console.log('Response status:', response.status);
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Result from server:', result);
+                    displayResults(result);
+                } else {
+                    const errorText = await response.text(); // Get error text
+                    throw new Error(`Error uploading file: ${response.status} - ${errorText}`);
+                }
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        function displayResults(data) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<h2>Segmentation Results</h2>';
+            const table = document.createElement('table');
+            const headerRow = document.createElement('tr');
+
+            // Create table headers
+            const headers = ['CustomerID', 'Amount', 'Frequency', 'Recency', 'Cluster'];
+            headers.forEach(headerText => {
+                const header = document.createElement('th');
+                header.innerText = headerText;
+                headerRow.appendChild(header);
+            });
+            table.appendChild(headerRow);
+
+            // Create table rows for results
+            data.forEach(row => {
+                const tableRow = document.createElement('tr');
+                headers.forEach(header => {
+                    const cell = document.createElement('td');
+                    cell.innerText = row[header.toLowerCase()];
+                    tableRow.appendChild(cell);
+                });
+                table.appendChild(tableRow);
+            });
+
+            resultDiv.appendChild(table);
+        }
+    </script>
+</head>
+<body>
+    <h1>Upload your onlineRetail.csv file for RFM Analysis</h1>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <!-- File input -->
+        <input placeholder="file" type ="file" name="file" accept=".csv" required>
+        <!-- Submit button -->
+        <input type="submit" value="Upload">
+</body>
+</html>
